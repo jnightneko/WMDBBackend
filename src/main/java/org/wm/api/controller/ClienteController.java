@@ -3,7 +3,7 @@ package org.wm.api.controller;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import org.wm.api.dto.DTOCliente;
+import org.wm.api.data.ICliente;
 import org.wm.api.service.ClienteService;
 
 @RestController
@@ -11,30 +11,29 @@ import org.wm.api.service.ClienteService;
 @RequiredArgsConstructor
 public class ClienteController {
     
-    private final ClienteService clienteService;
+    private final ClienteService service;
+    @PostMapping
+    public ICliente createCliente(@RequestBody ICliente request) {
+        return service.crate(request);
+    }
     
     @GetMapping
-    public List<DTOCliente> getAllCliente() {
-        return clienteService.getAllCliente();
+    public List<ICliente> getAllCliente() {
+        return service.getAll();
     }
     
     @GetMapping("/{id}")
-    public DTOCliente getCliente(@PathVariable Long id) {
-        return clienteService.getClienteById(id);
-    }
-    
-    @PostMapping
-    public DTOCliente createCliente(@RequestBody DTOCliente cliente) {
-        return clienteService.createCliente(cliente);
+    public ICliente getClienteById(@PathVariable Long id) {
+        return service.getById(id);
     }
     
     @PutMapping("/{id}")
-    public DTOCliente updateCliente(@PathVariable Long id, @RequestBody DTOCliente cliente) {
-        return clienteService.updateCliente(id, cliente);
+    public ICliente updateCliente(@PathVariable Long id, @RequestBody ICliente request) {
+        return service.update(id, request);
     }
     
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public void deleteCliente(@PathVariable Long id) {
-        clienteService.deleteCliente(id);
+        service.delete(id);
     }
 }
