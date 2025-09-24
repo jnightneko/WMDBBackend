@@ -29,7 +29,4 @@ public class Producto {
     
     private Integer cantidad;
     private Float precio;
-    
-    @ManyToMany(mappedBy = "productos")
-    private List<Pedido> pedidos;
 }

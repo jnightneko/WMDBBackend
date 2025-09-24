@@ -7,24 +7,15 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "Cliente")
-@Table(name = "Cliente")
-public class Cliente {
+@Entity(name = "Rol")
+@Table(name = "Rol")
+public class Rol {
     
     @Id    
     @GeneratedValue(
         strategy = GenerationType.IDENTITY
     )
-    private Long idCliente;
+    private Long idRol;
     
-    @Column(
-        length = 50
-    )
     private String nombre;
-    
-    @ManyToOne
-    @JoinColumn(
-        name = "idUsuario"
-    )
-    private Usuario usuario;
 }

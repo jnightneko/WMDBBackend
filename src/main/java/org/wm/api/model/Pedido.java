@@ -1,7 +1,6 @@
 package org.wm.api.model;
 
 import jakarta.persistence.*;
-import java.util.List;
 import lombok.*;
 
 @Data
@@ -29,18 +28,4 @@ public class Pedido {
         name = "idCliente"
     )
     private Cliente cliente;
-    
-    @ManyToMany(
-        targetEntity = Producto.class
-    )
-    @JoinTable(
-        name = "DetallePedido",
-        joinColumns = @JoinColumn(
-            name = "idPedido"
-        ),
-        inverseJoinColumns = @JoinColumn(
-            name = "idProducto"
-        )
-    )
-    private List<Producto> productos;
 }

@@ -3,7 +3,7 @@ package org.wm.api.controller;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import org.wm.api.dto.DTOProducto;
+import org.wm.api.data.IProducto;
 import org.wm.api.service.ProductoService;
 
 @RestController
@@ -11,30 +11,29 @@ import org.wm.api.service.ProductoService;
 @RequiredArgsConstructor
 public class ProductoController {
     
-    private final ProductoService productoService;
+    private final ProductoService service;
+    @PostMapping
+    public IProducto createProducto(@RequestBody IProducto request) {
+        return service.crate(request);
+    }
     
     @GetMapping
-    public List<DTOProducto> getAllProducto() {
-        return productoService.getAllProducto();
+    public List<IProducto> getAllProducto() {
+        return service.getAll();
     }
     
     @GetMapping("/{id}")
-    public DTOProducto getProducto(@PathVariable Long id) {
-        return productoService.getProductoById(id);
-    }
-    
-    @PostMapping
-    public DTOProducto createProducto(@RequestBody DTOProducto producto) {
-        return productoService.createProducto(producto);
+    public IProducto getProductoById(@PathVariable Long id) {
+        return service.getById(id);
     }
     
     @PutMapping("/{id}")
-    public DTOProducto updateProducto(@PathVariable Long id, @RequestBody DTOProducto producto) {
-        return productoService.updateProducto(id, producto);
+    public IProducto updateProducto(@PathVariable Long id, @RequestBody IProducto request) {
+        return service.update(id, request);
     }
     
-    @DeleteMapping
-    public void deleteCliente(@PathVariable Long id) {
-        productoService.deleteProducto(id);
+    @DeleteMapping("/{id}")
+    public void deleteProducto(@PathVariable Long id) {
+        service.delete(id);
     }
 }
