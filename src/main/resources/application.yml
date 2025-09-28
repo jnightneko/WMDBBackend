@@ -1,6 +1,16 @@
 server:
   port: 8080
 
+application:
+  cors:
+    host: ${CORS_HOST}
+    methods:
+      - GET
+      - POST
+      - PUT
+      - PATCH
+      - DELETE
+
 spring:
   application:
     name: API
