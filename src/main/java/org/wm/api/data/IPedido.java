@@ -5,7 +5,8 @@ import org.wm.api.model.Pedido;
 public record IPedido(
     Long id,
     float total,
-    ICliente cliente
+    ICliente cliente,
+    String ubicacion
 ) {
     public static IPedido valueOf(Pedido model) {
         if (model == null) {
@@ -14,7 +15,8 @@ public record IPedido(
         return new IPedido(
                 model.getIdPedido(),
                 model.getTotal(),
-                ICliente.valueOf(model.getCliente())
+                ICliente.valueOf(model.getCliente()),
+                model.getUbicacion()
         );
     }
 }

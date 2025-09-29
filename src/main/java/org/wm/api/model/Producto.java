@@ -26,6 +26,7 @@ public class Producto {
         length = 50
     )
     private String nombre;
+    private String imagen;
     
     private Integer cantidad;
     private Float precio;

@@ -26,6 +26,7 @@ public class PedidoService {
         Pedido model = Pedido.builder()
                 .cliente(opCliente.get())
                 .total(request.total())
+                .ubicacion(request.ubicacion())
                 .build();
         return IPedido.valueOf(
                 repository.save(model)
@@ -56,6 +57,7 @@ public class PedidoService {
         
         Pedido opModel = myModel.get();
         opModel.setTotal(request.total());
+        opModel.setUbicacion(request.ubicacion());
         
         if (request.cliente() != null) {
             Optional<Cliente> opCliente = clienteRepository.findById(request.cliente().id());

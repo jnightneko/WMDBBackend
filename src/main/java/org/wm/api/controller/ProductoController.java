@@ -3,6 +3,7 @@ package org.wm.api.controller;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.wm.api.data.IProducto;
 import org.wm.api.service.ProductoService;
 
@@ -12,9 +13,11 @@ import org.wm.api.service.ProductoService;
 public class ProductoController {
     
     private final ProductoService service;
-    @PostMapping
-    public IProducto createProducto(@RequestBody IProducto request) {
-        return service.crate(request);
+    @PostMapping()
+    public IProducto createProducto(
+            @RequestPart("producto")  IProducto request,
+            @RequestPart("imagen") MultipartFile img) {
+        return service.crate(request, img);
     }
     
     @GetMapping
