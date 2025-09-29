@@ -1,9 +1,15 @@
 package org.wm.api.service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.wm.api.data.IProducto;
 import org.wm.api.model.Producto;
 import org.wm.api.repository.ProductoRepository;
@@ -13,11 +19,27 @@ import org.wm.api.repository.ProductoRepository;
 public class ProductoService {
     
     private final ProductoRepository repository;
-    public IProducto crate(IProducto request) {        
+    public IProducto crate(IProducto request, MultipartFile img) {
+        String fileName  = System.currentTimeMillis() + "_" + img.getOriginalFilename();
+        String uploadDir = System.getProperty("user.dir") + "/app/uploads/";
+        Path uploadPath  = Paths.get(uploadDir);
+
+        try {
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            Path filePath = uploadPath.resolve(fileName);
+            Files.copy(img.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to store image: " + e);
+        }
+
         Producto model = Producto.builder()
                 .nombre(request.nombre())
                 .cantidad(request.cantidad())
                 .precio(request.precio())
+                .imagen("/uploads/" + fileName)
                 .build();
         return IProducto.valueOf(
                 repository.save(model)
@@ -50,6 +72,7 @@ public class ProductoService {
         opModel.setNombre(request.nombre());
         opModel.setCantidad(request.cantidad());
         opModel.setPrecio(request.precio());
+        opModel.setImagen(request.ruta());
         
         return IProducto.valueOf(
                 repository.save(opModel)

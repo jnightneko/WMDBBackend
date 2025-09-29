@@ -44,6 +44,7 @@ public class ClientePedidoService {
         Pedido pedido = Pedido.builder()
                 .cliente(opCliente.get())
                 .total(0.0f)
+                .ubicacion(request.ubicacion())
                 .build();
         pedido = pedidoRepository.save(pedido);
         

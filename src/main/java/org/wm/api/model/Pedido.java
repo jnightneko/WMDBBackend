@@ -20,8 +20,10 @@ public class Pedido {
     @Column(
         length = 50
     )
-    private Float total;
+    private Float total;    
     
+    @Lob
+    private String ubicacion;
     
     @ManyToOne
     @JoinColumn(
