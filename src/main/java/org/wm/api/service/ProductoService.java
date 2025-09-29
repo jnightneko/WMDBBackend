@@ -1,5 +1,6 @@
 package org.wm.api.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -62,7 +63,7 @@ public class ProductoService {
         return IProducto.valueOf(opModel);
     }
     
-    public IProducto update(Long id, IProducto request) {
+    public IProducto update(Long id, IProducto request, MultipartFile img) {
         Optional<Producto> myModel = repository.findById(id);
         if (myModel.isEmpty()) {
             return null;
@@ -72,14 +73,44 @@ public class ProductoService {
         opModel.setNombre(request.nombre());
         opModel.setCantidad(request.cantidad());
         opModel.setPrecio(request.precio());
-        opModel.setImagen(request.ruta());
-        
+
+        if (img != null) {
+            String fileName  = opModel.getImagen();
+            String uploadDir = System.getProperty("user.dir") + "/app/" + fileName;
+            
+            File file = new File(uploadDir);
+            if (file.exists()) {
+                try {
+                    Files.copy(img.getInputStream(), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                } catch (IOException e) {
+                    throw new RuntimeException("Failed to store image: " + e);
+                }
+            }
+            
+            opModel.setImagen(fileName);
+        }
+
         return IProducto.valueOf(
                 repository.save(opModel)
         );
     }
     
     public void delete(Long id) {
+        Optional<Producto> model = repository.findById(id);
+        if (model.isEmpty()) {
+            return;
+        }
+        
+        Producto opModel = model.get();
+        if (opModel.getImagen() != null) {
+            String fileName  = opModel.getImagen();
+            String uploadDir = System.getProperty("user.dir") + "/app/" + fileName;
+            
+            File file = new File(uploadDir);
+            if (file.exists()) {
+                file.delete();
+            }
+        }
         repository.deleteById(id);
     }
 }

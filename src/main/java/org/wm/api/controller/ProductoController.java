@@ -31,8 +31,15 @@ public class ProductoController {
     }
     
     @PutMapping("/{id}")
-    public IProducto updateProducto(@PathVariable Long id, @RequestBody IProducto request) {
-        return service.update(id, request);
+    public IProducto updateProducto(
+            @PathVariable Long id,
+            @RequestPart("producto")  IProducto request,
+            @RequestPart(
+                name = "imagen",
+                required = false
+            ) MultipartFile img
+    ) {
+        return service.update(id, request, img);
     }
     
     @DeleteMapping("/{id}")
