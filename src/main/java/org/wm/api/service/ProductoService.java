@@ -20,7 +20,8 @@ import org.wm.api.repository.ProductoRepository;
 public class ProductoService {
     
     private final ProductoRepository repository;
-    public IProducto crate(IProducto request, MultipartFile img) {
+    
+    private String uploadImg(MultipartFile img) {
         String fileName  = System.currentTimeMillis() + "_" + img.getOriginalFilename();
         String uploadDir = System.getProperty("user.dir") + "/app/uploads/";
         Path uploadPath  = Paths.get(uploadDir);
@@ -35,7 +36,11 @@ public class ProductoService {
         } catch (IOException e) {
             throw new RuntimeException("Failed to store image: " + e);
         }
-
+        return fileName;
+    }
+    
+    public IProducto crate(IProducto request, MultipartFile img) {
+        String fileName = uploadImg(img);
         Producto model = Producto.builder()
                 .nombre(request.nombre())
                 .cantidad(request.cantidad())
@@ -85,6 +90,8 @@ public class ProductoService {
                 } catch (IOException e) {
                     throw new RuntimeException("Failed to store image: " + e);
                 }
+            } else {
+                fileName = "/uploads/" + uploadImg(img);
             }
             
             opModel.setImagen(fileName);
