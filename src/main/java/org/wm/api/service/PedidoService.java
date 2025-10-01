@@ -7,14 +7,17 @@ import org.springframework.stereotype.Service;
 import org.wm.api.data.IPedido;
 import org.wm.api.model.Cliente;
 import org.wm.api.model.Pedido;
+import org.wm.api.model.Usuario;
 import org.wm.api.repository.ClienteRepository;
 import org.wm.api.repository.PedidoRepository;
+import org.wm.api.repository.UsuarioRepository;
 
 @Service
 @RequiredArgsConstructor
 public class PedidoService {
     
     private final PedidoRepository repository;
+    private final UsuarioRepository usuarioRepository;
     private final ClienteRepository clienteRepository;
     
     public IPedido crate(IPedido request) {
@@ -41,7 +44,12 @@ public class PedidoService {
     }
     
     public List<IPedido> getAllByIdCliente(Long id) {
-        Optional<Cliente> opCliente = clienteRepository.findById(id);
+        Optional<Usuario> opUser = usuarioRepository.findById(id);
+        if (opUser.isEmpty()) {
+            throw new IllegalArgumentException("El usuario no existe");
+        }
+        
+        Optional<Cliente> opCliente = clienteRepository.findByUsuario(opUser.get());
         if (opCliente.isEmpty()) {
             throw new IllegalArgumentException("El cliente no existe");
         }
