@@ -40,6 +40,17 @@ public class PedidoService {
                 .toList();
     }
     
+    public List<IPedido> getAllByIdCliente(Long id) {
+        Optional<Cliente> opCliente = clienteRepository.findById(id);
+        if (opCliente.isEmpty()) {
+            throw new IllegalArgumentException("El cliente no existe");
+        }
+        List<Pedido> models = repository.findAllByCliente(opCliente.get());
+        return models.stream()
+                .map((value) -> IPedido.valueOf(value))
+                .toList();
+    }
+    
     public IPedido getById(Long id) {
         Optional<Pedido> model = repository.findById(id);
         if (model.isEmpty()) {

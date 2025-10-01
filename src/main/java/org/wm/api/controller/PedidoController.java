@@ -22,6 +22,11 @@ public class PedidoController {
         return service.getAll();
     }
     
+    @GetMapping("/cliente/{id}")
+    public List<IPedido> getAllPedidoCliente(@PathVariable Long id) {
+        return service.getAllByIdCliente(id);
+    }
+    
     @GetMapping("/{id}")
     public IPedido getPedidoById(@PathVariable Long id) {
         return service.getById(id);
