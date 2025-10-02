@@ -2,6 +2,7 @@ package org.wm.api.service;
 
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -113,6 +114,8 @@ public class ClientePedidoService {
                     .cantidad(element.cantidad())
                     .pedido(pedido)
                     .producto(mProducto)
+                    .createdAt(new Date())
+                    .updatedAt(new Date())
                     .build();
             detallePedidoRepository.save(detallePedido);
         }
