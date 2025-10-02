@@ -1,7 +1,10 @@
 package org.wm.api.model;
 
 import jakarta.persistence.*;
+import java.util.Date;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Data
 @Builder
@@ -30,4 +33,10 @@ public class DetallePedido {
         name = "idProducto"
     )
     private Producto producto;
+    
+    @CreatedDate
+    private Date createdAt;
+
+    @LastModifiedDate
+    private Date updatedAt;
 }
