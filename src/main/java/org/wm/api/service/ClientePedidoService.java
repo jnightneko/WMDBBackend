@@ -1,17 +1,22 @@
 package org.wm.api.service;
 
 import jakarta.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.wm.api.data.ICliente;
 import org.wm.api.data.IClientePProducto;
 import org.wm.api.data.IClientePedido;
+import org.wm.api.data.IDetallePedido;
+import org.wm.api.data.IReporte;
 import org.wm.api.data.IUsuario;
 import org.wm.api.model.Cliente;
 import org.wm.api.model.DetallePedido;
 import org.wm.api.model.Pedido;
 import org.wm.api.model.Producto;
+import org.wm.api.model.Usuario;
 import org.wm.api.repository.ClienteRepository;
 import org.wm.api.repository.DetallePedidoRepository;
 import org.wm.api.repository.PedidoRepository;
@@ -27,6 +32,39 @@ public class ClientePedidoService {
     private final ProductoRepository productoRepository;
     private final UsuarioRepository usuarioRepository;
     private final DetallePedidoRepository detallePedidoRepository;
+    
+    public List<IReporte> getAllReporte() {
+        List<Usuario> usuarios = usuarioRepository.findAll();
+        List<IReporte> reportes = new ArrayList<>();
+        
+        for (Usuario user : usuarios) {
+            Cliente cliente = clienteRepository.findByUsuario(user)
+                    .orElse(null);
+            
+            if (cliente == null)
+                continue;
+            
+            List<IDetallePedido> detallePedidosModel = new ArrayList<>();
+            int productos = 0;
+            
+            List<Pedido> pedidos = pedidoRepository.findAllByCliente(cliente);
+            for (Pedido tran : pedidos) {
+                List<DetallePedido> detalle = detallePedidoRepository.findAllByPedido(tran);
+                detallePedidosModel.addAll(detalle.stream()
+                        .map((value) -> IDetallePedido.valueOf(value))
+                        .toList());
+                productos += detalle.size();
+            }
+            
+            reportes.add(new IReporte(
+                    ICliente.valueOf(cliente),
+                    detallePedidosModel,
+                    pedidos.size(),
+                    productos));
+        }
+        
+        return reportes;
+    }
     
     @Transactional
     public IClientePedido create(IClientePedido request) {
