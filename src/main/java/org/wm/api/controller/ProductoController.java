@@ -16,7 +16,8 @@ public class ProductoController {
     @PostMapping()
     public IProducto createProducto(
             @RequestPart("producto")  IProducto request,
-            @RequestPart("imagen") MultipartFile img) {
+            @RequestPart("imagen") MultipartFile img
+    ) {
         return service.crate(request, img);
     }
     

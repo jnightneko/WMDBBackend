@@ -20,7 +20,9 @@ public class Pedido {
     @Column(
         length = 50
     )
-    private Float total;    
+    private Float total;
+    
+    private String foto;
     
     @Lob
     private String ubicacion;

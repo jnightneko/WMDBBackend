@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.wm.api.data.ICliente;
 import org.wm.api.data.IClientePProducto;
 import org.wm.api.data.IClientePedido;
@@ -68,7 +69,7 @@ public class ClientePedidoService {
     }
     
     @Transactional
-    public IClientePedido create(IClientePedido request) {
+    public IClientePedido create(IClientePedido request, MultipartFile img) {
         IUsuario usuario = request.usuario();
         
         Optional<Cliente> opCliente = clienteRepository.findByUsuario(
@@ -80,10 +81,12 @@ public class ClientePedidoService {
             throw new IllegalArgumentException("Usuario|Cliente inexistente");
         }
         
+        String fileName= ProductoService.uploadImg(img);
         Pedido pedido = Pedido.builder()
                 .cliente(opCliente.get())
                 .total(0.0f)
                 .ubicacion(request.ubicacion())
+                .foto("/uploads/" + fileName)
                 .build();
         pedido = pedidoRepository.save(pedido);
         

@@ -21,7 +21,7 @@ public class ProductoService {
     
     private final ProductoRepository repository;
     
-    private String uploadImg(MultipartFile img) {
+    public static String uploadImg(MultipartFile img) {
         String fileName  = System.currentTimeMillis() + "_" + img.getOriginalFilename();
         String uploadDir = System.getProperty("user.dir") + "/app/uploads/";
         Path uploadPath  = Paths.get(uploadDir);

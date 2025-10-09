@@ -6,7 +6,8 @@ public record IPedido(
     Long id,
     float total,
     ICliente cliente,
-    String ubicacion
+    String ubicacion,
+    String foto
 ) {
     public static IPedido valueOf(Pedido model) {
         if (model == null) {
@@ -16,7 +17,8 @@ public record IPedido(
                 model.getIdPedido(),
                 model.getTotal(),
                 ICliente.valueOf(model.getCliente()),
-                model.getUbicacion()
+                model.getUbicacion(),
+                model.getFoto()
         );
     }
 }
